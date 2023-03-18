@@ -1,5 +1,6 @@
 /module33/bin/
 /module33/obj/
+/module33/Logs/
 /.vscode/
 *.json
 *.csproj

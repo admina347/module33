@@ -5,12 +5,16 @@ namespace module33.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        public UserController()
+        private ILoger _loger;
+        public UserController(ILoger loger)
         {
-            var logger = new Logger();
+            _loger =loger;
+            
+            //Create log new folder
+            loger.CreateLogDir();
 
-            logger.WriteEvent("Сообщение о событии в программе");
-            logger.WriteError("Сообщение об ошибке в программе");
+            loger.WriteEvent("Сообщение о событии в программе");
+            loger.WriteError("Сообщение об ошибке в программе");
         }
 
         [HttpGet]
