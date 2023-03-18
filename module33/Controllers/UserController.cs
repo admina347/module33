@@ -11,7 +11,7 @@ namespace module33.Controllers
             _loger =loger;
             
             //Create log new folder
-            loger.CreateLogDir();
+            //loger.CreateLogDir();
 
             loger.WriteEvent("Сообщение о событии в программе");
             loger.WriteError("Сообщение об ошибке в программе");

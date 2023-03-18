@@ -2,40 +2,49 @@ namespace module33
 {
     public class Loger : ILoger
     {
-        string logDirName = DateTime.Now.ToString();
-        string logsDir = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+        private ReaderWriterLockSlim lock_ = new ReaderWriterLockSlim();
 
-        public void CreateLogDir()
+        private string logDirectory { get; set; }
+
+        public Loger()
         {
-            string newlogDir = Path.Combine(logsDir, logDirName);
-            Directory.CreateDirectory(newlogDir);
+            logDirectory = AppDomain.CurrentDomain.BaseDirectory + @"/Logs/" + DateTime.Now.ToString("dd-MM-yy HH-mm-ss") + @"/";
+
+            if (!Directory.Exists(logDirectory))
+                Directory.CreateDirectory(logDirectory);
+        }
+        public void WriteEvent(string eventMessage)
+        {
+            lock_.EnterWriteLock();
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(logDirectory + "events.txt", append: true))
+                {
+                    writer.WriteLine(eventMessage);
+                }
+            }
+            finally
+            {
+                lock_.ExitWriteLock();
+            }
+
         }
 
-        public async Task WriteEvent(string eventMessage)
+        public void WriteError(string errorMessage)
         {
-            Console.WriteLine(eventMessage);
-            // Строка для публикации в лог
-            string logMessage = $"[{DateTime.Now}]: New event: {eventMessage}";
+            lock_.EnterWriteLock();
+            try
+            {
+                using (StreamWriter writer = new StreamWriter("errors.txt", append: true))
+                {
+                    writer.WriteLine(errorMessage);
+                }
+            }
+            finally
+            {
+                lock_.ExitWriteLock();
+            }
 
-            // Путь до лога (опять-таки, используем свойства IWebHostEnvironment)
-            string logFilePath = Path.Combine(logsDir, logDirName, "events.txt");
-
-            // Используем асинхронную запись в файл
-            await File.AppendAllTextAsync(logFilePath, logMessage);
-
-        }
-
-        public async Task WriteError(string errorMessage)
-        {
-            Console.WriteLine(errorMessage);
-            // Строка для публикации в лог
-            string logMessage = $"[{DateTime.Now}]: New error: {errorMessage}";
-
-            // Путь до лога (опять-таки, используем свойства IWebHostEnvironment)
-            string logFilePath = Path.Combine(logsDir, logDirName, "errors.txt");
-
-            // Используем асинхронную запись в файл
-            await File.AppendAllTextAsync(logFilePath, logMessage);
         }
     }
 }

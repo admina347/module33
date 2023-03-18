@@ -2,8 +2,8 @@ namespace module33
 {
     public interface ILoger
     {
-        void CreateLogDir();
-        Task WriteError(string errorMessage);
-        Task WriteEvent(string eventMessage);
+        //void CreateLogDir();
+        void WriteError(string errorMessage);
+        void WriteEvent(string eventMessage);
     }
 }
