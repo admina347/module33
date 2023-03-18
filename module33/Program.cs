@@ -1,3 +1,4 @@
+using AutoMapper;
 using module33;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILoger, Loger>();
+var mapperConfig = new MapperConfiguration((v) => 
+{
+    v.AddProfile(new MappingProfile());
+}
+);
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 
