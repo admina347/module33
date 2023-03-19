@@ -8,16 +8,22 @@ namespace module33.Controllers
     {
         private IMapper _mapper;
         private ILoger _loger;
-        public UserController(ILoger loger, IMapper mapper)
+        private IUserRepository _userRepository;
+        public UserController(ILoger loger, IMapper mapper, IUserRepository userRepository)
         {
             _loger = loger;
             _mapper = mapper;
+            _userRepository = userRepository;
 
             //Create log new folder
             //loger.CreateLogDir();
 
             loger.WriteEvent("Сообщение о событии в программе");
             loger.WriteError("Сообщение об ошибке в программе");
+
+            //
+            //userRepository.GetAll();
+            //userRepository.GetByLogin("oleg");
         }
 
         [HttpGet]
@@ -34,6 +40,7 @@ namespace module33.Controllers
             };
         }
 
+        
         [HttpGet]
         [Route("viewmodel")]
         public UserViewModel GetUserViewModel()
@@ -48,7 +55,7 @@ namespace module33.Controllers
                 Login = "ivanov"
             };
 
-            var userViewModel = _mapper.Map<UserViewModel>(User);
+            var userViewModel = _mapper.Map<UserViewModel>(user);
             // UserViewModel userViewModel = new UserViewModel(user);
 
             return userViewModel;

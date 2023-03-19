@@ -17,6 +17,8 @@ var mapperConfig = new MapperConfiguration((v) =>
 );
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+//User repository
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

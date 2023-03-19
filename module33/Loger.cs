@@ -8,7 +8,7 @@ namespace module33
 
         public Loger()
         {
-            logDirectory = AppDomain.CurrentDomain.BaseDirectory + @"/Logs/" + DateTime.Now.ToString("dd-MM-yy HH-mm-ss") + @"/";
+            logDirectory = AppDomain.CurrentDomain.BaseDirectory + @"Logs/" + DateTime.Now.ToString("dd-MM-yy HH-mm-ss") + @"/";
 
             if (!Directory.Exists(logDirectory))
                 Directory.CreateDirectory(logDirectory);
