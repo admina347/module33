@@ -35,6 +35,8 @@ builder.Services.AddAuthentication(options => options.DefaultScheme = "Cookies")
 
 var app = builder.Build();
 
+app.UseMiddleware<LogMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

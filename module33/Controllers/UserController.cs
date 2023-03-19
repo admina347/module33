@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace module33.Controllers
 {
+    [ExceptionHandler]
+    [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
