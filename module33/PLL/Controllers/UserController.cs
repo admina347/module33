@@ -25,8 +25,8 @@ namespace module33.Controllers
             //Create log new folder
             //loger.CreateLogDir();
 
-            loger.WriteEvent("Сообщение о событии в программе");
-            loger.WriteError("Сообщение об ошибке в программе");
+            //loger.WriteEvent("Сообщение о событии в программе");
+            //loger.WriteError("Сообщение об ошибке в программе");
 
             //
             //userRepository.GetAll();
