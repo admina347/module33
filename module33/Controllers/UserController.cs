@@ -1,4 +1,9 @@
+using System.Security.Authentication;
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace module33.Controllers
@@ -40,7 +45,7 @@ namespace module33.Controllers
             };
         }
 
-        
+        [Authorize]
         [HttpGet]
         [Route("viewmodel")]
         public UserViewModel GetUserViewModel()
@@ -59,6 +64,34 @@ namespace module33.Controllers
             // UserViewModel userViewModel = new UserViewModel(user);
 
             return userViewModel;
+        }
+
+        [HttpGet]
+        [Route("authenticate")]
+        public async Task<UserViewModel> Authenticate(string login, string password)
+        {
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
+                throw new ArgumentNullException("Запрос не корректен");
+            User user = _userRepository.GetByLogin(login);
+            if (user is null)
+                throw new AuthenticationException("Пользователь на найден");
+            if (user.Password != password)
+                throw new AuthenticationException("Введенный пароль не корректен");
+            
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
+            };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(
+                claims, 
+                "AppCookie", 
+                ClaimsIdentity.DefaultNameClaimType, 
+                ClaimsIdentity.DefaultRoleClaimType);
+            
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            return _mapper.Map <UserViewModel> (user);
         }
     }
 }
