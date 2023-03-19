@@ -45,7 +45,7 @@ namespace module33.Controllers
             };
         }
 
-        [Authorize]
+        [Authorize(Roles = "Администратор")]
         [HttpGet]
         [Route("viewmodel")]
         public UserViewModel GetUserViewModel()
@@ -70,6 +70,7 @@ namespace module33.Controllers
         [Route("authenticate")]
         public async Task<UserViewModel> Authenticate(string login, string password)
         {
+
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
                 throw new ArgumentNullException("Запрос не корректен");
             User user = _userRepository.GetByLogin(login);
@@ -80,7 +81,8 @@ namespace module33.Controllers
             
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(

@@ -2,51 +2,64 @@ namespace module33
 {
     public class UserRepository : IUserRepository
     {
-        List<User> Users { get; set; } = new List<User>();
+        private readonly List<User> _users = new List<User>();
 
         public UserRepository()
         {
-            Users.Add(new User
+            _users.Add(new User
             {
                 Id = Guid.NewGuid(),
                 Login = "ivan",
                 Password = "123456",
                 FirstName = "Иван",
                 LastName = "Петров",
-                Email = "ivan-p@gmail.com"
+                Email = "ivan-p@gmail.com",
+                Role = new Role()
+                {
+                    Id = 1,
+                    Name = "Пользователь"
+                }
             });
-            Users.Add(new User
+            _users.Add(new User
             {
                 Id = Guid.NewGuid(),
                 Login = "peti",
                 Password = "qwwretg",
                 FirstName = "Пётр",
                 LastName = "Иванов",
-                Email = "peti@mail.ru"
+                Email = "peti@mail.ru",
+                Role = new Role()
+                {
+                    Id = 1,
+                    Name = "Пользователь"
+                }
             });
-            Users.Add(new User
+            _users.Add(new User
             {
                 Id = Guid.NewGuid(),
                 Login = "oleg",
-                Password = "213egfdn",
+                Password = "21",
                 FirstName = "Олег",
                 LastName = "Иванов",
-                Email = "oleg87@mail.ru"
+                Email = "oleg87@mail.ru",
+                Role = new Role()
+                {
+                    Id = 2,
+                    Name = "Администратор"
+                }
             });
         }
 
         //Get all users
         public IEnumerable<User> GetAll()
         {
-            IEnumerable<User> users = Users;
-            return users;
+            return _users;
         }
 
         //Get usre by login
         public User GetByLogin(string login)
         {
-            User user = Users.FirstOrDefault(u => u.Login == login);
-            return user;
+            return _users.FirstOrDefault(u => u.Login == login);
         }
     }
 }
